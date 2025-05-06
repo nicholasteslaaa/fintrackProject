@@ -46,8 +46,11 @@ public class LoginPageController {
         if(username.isEmpty() || password.isEmpty()){
             confirmationAlert("username dan password tidak boleh kosong");
         }
-        else if(userdata.login(username,password)){
+        else if(userdata.login(username,password) == 0){
             confirmationAlert("login berhasil!");
+        }
+        else if(userdata.login(username,password) == 1){
+            confirmationAlert("password salah!");
         }
         else{
             confirmationAlert("akun tidak ditemukan!");
@@ -68,16 +71,20 @@ public class LoginPageController {
         String username = tfUsername.getText().strip();
         String password = pfPassword.getText().strip();
 
-        if(username.isEmpty() || password.isEmpty()){
-            confirmationAlert("username dan password tidak boleh kosong");
+        if (userdata.isExist(username)){
+            confirmationAlert("Username sudah terdaftar");
         }
-        else if(userdata.register(username,password)){
-            confirmationAlert("akun berhasil di daftarkan!");
-        }else {
-            confirmationAlert("register gagal atau username sudah terdaftar");
+        else{
+            if(username.isEmpty() || password.isEmpty()){
+                confirmationAlert("username dan password tidak boleh kosong");
+            }
+            else if(userdata.register(username,password)){
+                confirmationAlert("akun berhasil di daftarkan!");
+            }else {
+                confirmationAlert("register gagal");
+            }
+            formSetController.addingUserDataToTable();
         }
-        formSetController.addingUserDataToTable();
-
 
     }
 

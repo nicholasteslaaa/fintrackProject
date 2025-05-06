@@ -32,18 +32,39 @@ public class UserData {
         return allData;
     }
 
-    public boolean login(String username,String password) throws SQLException {
-        String encryptedPassword = encrypt.encryption(password);
-        ArrayList<Object[]> data = db.getDataQuery("SELECT * FROM userData WHERE username = ? AND password = ?",new String[] {username,encryptedPassword},"TEXT TEXT");
-        System.out.println(data.size());
-        if (!data.isEmpty()){
-            if(data.get(0)[0].toString().equals(username) && data.get(0)[1].toString().equals(encryptedPassword)){
-                System.out.println("login berhasil!");
+
+    public boolean isExist(String username) throws SQLException {
+        ArrayList<Object[]> usernameDatabase = db.RQuery("SELECT username FROM userData");
+
+        for (Object[] i : usernameDatabase){
+            if (i[0].toString().equals(username)){
                 return true;
             }
         }
+        return  false;
+    }
+
+    public int login(String username,String password) throws SQLException {
+        String encryptedPassword = encrypt.encryption(password);
+
+        if (isExist(username)){
+            ArrayList<Object[]> data = db.getDataQuery("SELECT * FROM userData WHERE username = ? AND password = ?",new String[] {username,encryptedPassword},"TEXT TEXT");
+            System.out.println(data.size());
+            if (!data.isEmpty()){
+                if(data.get(0)[0].toString().equals(username) && data.get(0)[1].toString().equals(encryptedPassword)){
+                    System.out.println("login berhasil!");
+                    return 0;
+                }
+            }
+            else{
+                System.out.println("password salah");
+                return 1;
+            }
+        }
+
+
         System.out.println("akun tidak di temukan!");
-        return false;
+        return 2;
     }
 
     public boolean register(String username,String password) throws SQLException {
@@ -60,6 +81,23 @@ public class UserData {
             }
         }
         return  false;
+    }
+
+    public boolean deleteAccount(String username,String password) throws SQLException {
+        String encryptedPassword = encrypt.encryption(password);
+        if(isExist(username)){
+            ArrayList<Object[]> data = db.getDataQuery("SELECT * FROM userData WHERE username = ? AND password = ?", new String[] {username,encryptedPassword},"TEXT TEXT");
+            if(data.size() > 0){
+                db.CUDQuery("DELETE FROM userData WHERE username = ? AND password = ?",new String[]{username,encryptedPassword},"TEXT TEXT");
+                if (isExist(username) == false){
+                    return true;
+                }
+            }
+        }else{
+            System.out.println("username tidak ditemukan");
+        }
+
+        return false;
     }
 
     public static void main(String[] args) throws SQLException {

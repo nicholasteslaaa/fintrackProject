@@ -30,12 +30,18 @@ public class DBConnection {
 
     public void CUDQuery(String query,String[] values,String dataType) throws SQLException {
         PreparedStatement pstmt = conn.prepareStatement(query);
-        String[] dataTypeArr = dataType.split(" ");
-        for (int i = 0; i < values.length ; i++){
-            setData(dataTypeArr[i],values[i],i+1,pstmt);
+        if (!query.isEmpty()){
+            if (values.length > 0){
+                String[] dataTypeArr = dataType.split(" ");
+                for (int i = 0; i < values.length ; i++){
+                    setData(dataTypeArr[i],values[i],i+1,pstmt);
+                }
+            }
+            int affectedRow = pstmt.executeUpdate();
+            System.out.println("Rows Affected: "+affectedRow);
+        }else{
+            System.out.println("Query kosong!");
         }
-        int affectedRow = pstmt.executeUpdate();
-        System.out.println("Rows Affected: "+affectedRow);
     }
 
     public ArrayList<Object[]> RQuery(String query, boolean showResult) throws SQLException {
@@ -189,6 +195,11 @@ public class DBConnection {
             colType[i-1] = metaData.getColumnTypeName(i);
         }
         return new String[][] {col,colType};
+    }
+
+    public static void main(String[] args) throws SQLException {
+        DBConnection db = new DBConnection("D:/education/college/semester 4/RPLBO/Fintrack/fintrackProject/FormSet/form/fintrackDatabase.db");
+        db.CUDQuery("DELETE FROM userData",new String[] {}, "TEXT TEXT");
     }
 
 }
