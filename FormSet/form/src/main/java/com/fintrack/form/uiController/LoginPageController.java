@@ -1,5 +1,6 @@
-package com.fintrack.form;
+package com.fintrack.form.uiController;
 
+import com.fintrack.form.tableManager.UserData;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -68,25 +69,9 @@ public class LoginPageController {
 
     @FXML
     protected void registerBtn() throws SQLException {
-        String username = tfUsername.getText().strip();
-        String password = pfPassword.getText().strip();
-
-        if (userdata.isExist(username)){
-            confirmationAlert("Username sudah terdaftar");
-        }
-        else{
-            if(username.isEmpty() || password.isEmpty()){
-                confirmationAlert("username dan password tidak boleh kosong");
-            }
-            else if(userdata.register(username,password)){
-                confirmationAlert("akun berhasil di daftarkan!");
-            }else {
-                confirmationAlert("register gagal");
-            }
-            formSetController.addingUserDataToTable();
-        }
-
+        formSetController.ShowRegisterForm();
     }
+
 
     public void setKeyAction(Scene scene){
         scene.setOnKeyPressed((KeyEvent event) -> {
