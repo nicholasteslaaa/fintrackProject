@@ -11,8 +11,16 @@ import java.sql.SQLException;
 public class Apps extends Application {
     @Override
     public void start(Stage stage) throws IOException, SQLException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Apps.class.getResource("LoginPage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        FXMLLoader fxmlLoader = new FXMLLoader(Apps.class.getResource("FormSet.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        // Set minimum size
+        stage.setMinWidth(700);
+        stage.setMinHeight(500);
+
+        // Set maximum size
+        stage.setMaxWidth(700);
+        stage.setMaxHeight(500);
+
         stage.setTitle("Fintrack");
         stage.setScene(scene);
         stage.show();

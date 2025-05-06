@@ -23,6 +23,12 @@ public class LoginPageController {
     @FXML
     private Button loginBtn;
 
+    private FormSetController formSetController;
+
+    public void setFormSetController(FormSetController controller) {
+        this.formSetController = controller;
+    }
+
     public LoginPageController() throws SQLException {
 
     }
@@ -46,6 +52,7 @@ public class LoginPageController {
         else{
             confirmationAlert("akun tidak ditemukan!");
         }
+
     }
 
     void confirmationAlert(String messege){
@@ -69,6 +76,9 @@ public class LoginPageController {
         }else {
             confirmationAlert("register gagal atau username sudah terdaftar");
         }
+        formSetController.addingUserDataToTable();
+
+
     }
 
     public void setKeyAction(Scene scene){

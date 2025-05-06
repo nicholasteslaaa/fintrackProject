@@ -38,7 +38,7 @@ public class DBConnection {
         System.out.println("Rows Affected: "+affectedRow);
     }
 
-    public void RQuery(String query) throws SQLException {
+    public ArrayList<Object[]> RQuery(String query, boolean showResult) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
 
@@ -46,14 +46,29 @@ public class DBConnection {
         String[] col = namaKolom[0];
         String[] colType = namaKolom[1];
 
+        ArrayList<Object[]> result = new ArrayList<>();
+
         while (rs.next()){
+            Object[] temp = new Object[col.length];
             for (int i = 0; i < col.length; i++){
                 Object data = getColumnData(colType[i],col[i],rs);
-                if ( i == 0) System.out.print("|");
-                System.out.print(data+"|");
+                if (showResult) {
+                    if ( i == 0) System.out.print("|");
+                    System.out.print(data + "|");
+                }
+                temp[i] = data;
             }
+            result.add(temp);
             System.out.println();
         }
+
+
+        return result;
+    }
+
+    public ArrayList<Object[]> RQuery(String query) throws SQLException {
+        ArrayList<Object[]> result = RQuery(query,false);
+        return result;
     }
 
     // hanya boleh target 1 cell

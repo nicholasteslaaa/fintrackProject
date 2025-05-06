@@ -2,14 +2,16 @@ package com.fintrack.form;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UserData {
     DBConnection db;
     Encryption encrypt;
-    private static UserData instance;
+    private ArrayList<Object[]> allData;
 
+    private static UserData instance;
     private UserData() throws SQLException {
-        this.db = new DBConnection("E:/Education/RPLBO/ProjectFintrack/fintrack/fintrackDatabase.db");
+        this.db = new DBConnection("D:/education/college/semester 4/RPLBO/Fintrack/fintrackProject/FormSet/form/fintrackDatabase.db");
         this.encrypt = new Encryption(10);
     }
 
@@ -18,6 +20,16 @@ public class UserData {
             instance = new UserData();
         }
         return instance;
+    }
+
+    public ArrayList<Object[]> getUserData() throws SQLException {
+        ArrayList<Object[]> result = db.RQuery("SELECT * FROM userData");
+        return result;
+    }
+
+    public ArrayList<Object[]> getAllData() throws SQLException {
+        allData = getUserData();
+        return allData;
     }
 
     public boolean login(String username,String password) throws SQLException {
@@ -48,5 +60,10 @@ public class UserData {
             }
         }
         return  false;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        UserData d = new UserData();
+        d.getUserData();
     }
 }
