@@ -64,6 +64,36 @@ public class FormSetController {
         currentUserLabel.setText(str);
     }
 
+    Object[] clickedData;
+
+    @FXML
+    private void initialize(){
+        catatanTV.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {  // or == 2 for double click
+                Object[] selected = catatanTV.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    clickedData = selected;
+                    System.out.println("Selected: " + Arrays.toString(clickedData));
+                }
+            }
+        });
+
+        kategoriTV.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {  // or == 2 for double click
+                Object[] selected = kategoriTV.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    clickedData = selected;
+                    System.out.println("Selected: " + Arrays.toString(clickedData));
+                }
+                else{
+                    clickedData = null;
+                    System.out.println(Arrays.toString(clickedData));
+                }
+            }
+        });
+
+    }
+
     @FXML
     public void ShowLoginForm() {
         String path = "/com/fintrack/form/LoginPage.fxml";
@@ -174,6 +204,36 @@ public class FormSetController {
     }
 
     @FXML
+    public void addEditCatatanForm(){
+        String path = "/com/fintrack/form/EditCatatanPage.fxml";
+        try {
+            if (session.getUsername() != null){
+                removeForm();
+                formNode = FXMLLoader.load(getClass().getResource(path));
+                mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+                refreshTable();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+                Parent loginRoot = loader.load();
+                // Get controller of login page
+                EditCatatanPageController editCatatanPageController = loader.getController();
+                // Inject this controller to login page
+                editCatatanPageController.setFormSetController(this);
+                // Show login page inside mainVBox
+                mainVBox.getChildren().setAll(loginRoot);
+
+            }else{
+                method.confirmationAlert("Anda Belum Login!");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
     public void showAddCategoryForm(){
         String path = "/com/fintrack/form/AddCategoryPage.fxml";
         try {
@@ -204,12 +264,14 @@ public class FormSetController {
     }
 
     @FXML
-    public void logoutBtn(){
+    public void logoutBtn() throws SQLException {
         if (session.getUsername() == null){
             method.confirmationAlert("Anda Belum Login!");
         }else{
             session.setUsername(null);
             setCurrentUserLabel("Current User: ");
+            removeForm();
+            refreshTable();
         }
     }
 

@@ -47,7 +47,7 @@ public class MethodCollection {
         return true;
     }
 
-    public static boolean isAlpha(Character chr) {
+    public boolean isAlpha(Character chr) {
         if (chr == null) {
             return false;
         }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" prefWidth="400" prefHeight="380"
+            fx:controller="your.package.ControllerEditKategori">
+    <VBox spacing="10" layoutX="50" layoutY="30" prefWidth="300">
+        <Label text="Kategori" />
+        <ComboBox fx:id="comboKategori" prefWidth="300" />
+
+        <Label text="Keterangan" />
+        <TextField fx:id="fieldKeterangan" prefWidth="300" />
+
+        <Label text="Harga" />
+        <TextField fx:id="fieldHarga" promptText="Rp." prefWidth="300" />
+
+        <Label text="Tanggal" />
+        <DatePicker fx:id="datePicker" prefWidth="300" />
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="btnSubmit" text="Simpan" onAction="#handleUpdate" style="-fx-background-color: black; -fx-text-fill: white;" prefWidth="140" />
+            <Button fx:id="btnHapus" text="Hapus" onAction="#handleDelete" style="-fx-background-color: red; -fx-text-fill: white;" prefWidth="140" />
+        </HBox>
+    </VBox>
+</AnchorPane>

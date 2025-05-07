@@ -44,14 +44,18 @@ public class AddKategoriController {
 
     @FXML
     private void addKategori() throws SQLException {
-        Double DailyLimit = Double.parseDouble(limit.getText().split(" ")[1]);
-        String nama = namaKategori.getText().toString();
-        if (categoryTable.addKategori(DailyLimit,nama)){
-            method.confirmationAlert("Kategori Berhasil Di Tambahkan");
+        if (!limit.getText().isEmpty() && !namaKategori.getText().isEmpty()){
+            Double DailyLimit = Double.parseDouble(limit.getText().split(" ")[1]);
+            String nama = namaKategori.getText().toString();
+            if (categoryTable.addKategori(DailyLimit,nama)){
+                method.confirmationAlert("Kategori Berhasil Di Tambahkan");
+            }else {
+                method.confirmationAlert("Kategori Gagal Di Tambahkan");
+            }
+            formSetController.refreshTable();
         }else {
-            method.confirmationAlert("Kategori Gagal Di Tambahkan");
+            method.confirmationAlert("Limit Dan nama kategori tidak boleh kosong");
         }
-        formSetController.refreshTable();
     }
 
 

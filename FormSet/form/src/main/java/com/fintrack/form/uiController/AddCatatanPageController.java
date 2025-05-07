@@ -48,27 +48,47 @@ public class AddCatatanPageController {
 
     @FXML
     private void addCatatan() throws SQLException {
-        String kategori = category.getValue();
-        Double harga = Double.parseDouble(priceField.getText().split(" ")[1]);
-        String tanggal = date.getValue().toString();
-        String deskripsi = descriptionField.getText();
+        if (category.getValue() == null){
+            method.confirmationAlert("Kategori tidak boleh kosong");
+        }
+        else if (priceField.getText().isEmpty()){
+            method.confirmationAlert("harga tidak boleh kosong");
+        }
+        else if(date.getValue() == null){
+            method.confirmationAlert("tanggal tidak boleh kosong");
+        }
+        else if (!(category.getValue() == null && priceField.getText().isEmpty() && date.getValue() == null)){
 
-        boolean result = false;
-        if (catatanKeuanganTable.countingTotalSpend(kategori,tanggal)+harga > harga){
-            if (method.confirmationAlert("Anda Sudah Melebihi Batas Harian "+ kategori+" Klick ok untuk abaikan")){
+            String kategori = category.getValue();
+            Double harga = Double.parseDouble(priceField.getText().split(" ")[1]);
+            String tanggal = date.getValue().toString();
+            String deskripsi = descriptionField.getText();if (deskripsi == null){deskripsi = "";}
+
+            boolean result = false;
+            if (catatanKeuanganTable.countingTotalSpend(kategori,tanggal)+harga > harga){
+                if (method.confirmationAlert("Anda Sudah Melebihi Batas Harian "+ kategori+" Klick ok untuk abaikan")){
+                    result = true;
+                }
+            }else{
                 result = true;
             }
-        }else{
-            result = true;
-        }
 
-        if (result){
-            catatanKeuanganTable.addCatatan(kategori,harga,tanggal,deskripsi, method.getNowDateTime());
-            method.confirmationAlert("Catatan Berhasil Di Tambahkan");
-        }else{
-            method.confirmationAlert("Catatan Gagal Di Tambahkan");
+            if (result){
+                catatanKeuanganTable.addCatatan(kategori,harga,tanggal,deskripsi, method.getNowDateTime());
+                method.confirmationAlert("Catatan Berhasil Di Tambahkan");
+            }else{
+                method.confirmationAlert("Catatan Gagal Di Tambahkan");
+            }
+            formSetController.refreshTable();
         }
-        formSetController.refreshTable();
+    }
+    Boolean isThereAnyLetter(String str){
+        for(Character i : str.toCharArray()){
+            if (!method.isAlpha(i)){
+                return false;
+            }
+        }
+        return true;
     }
 
 
