@@ -20,30 +20,30 @@
    </rowConstraints>
    <children>
 
-           <Button prefHeight="25.0" prefWidth="257.0" style="-fx-background-color: black; -fx-text-fill: white;" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+           <Button onAction="#addCatatan" prefHeight="25.0" prefWidth="257.0" style="-fx-background-color: black; -fx-text-fill: white;" text="Submit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
       <VBox GridPane.columnIndex="1" GridPane.rowIndex="4">
          <children>
    
                     <Label text="Description" />
-              <TextField prefHeight="0.0" prefWidth="303.0" />
+              <TextField fx:id="descriptionField" prefHeight="0.0" prefWidth="303.0" />
          </children>
       </VBox>
        <VBox prefWidth="300" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
 
               <Label text="Date" />
-           <DatePicker prefHeight="0.0" prefWidth="303.0" />
+           <DatePicker fx:id="date" prefHeight="0.0" prefWidth="303.0" />
        </VBox>
       <VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
    
                     <Label text="Price" />
-              <TextField prefHeight="0.0" prefWidth="303.0" promptText="Rp." />
+              <TextField fx:id="priceField" prefHeight="0.0" prefWidth="303.0" promptText="Rp. " />
          </children>
       </VBox>
       <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
               <Label text="Category" />
-              <ComboBox prefHeight="0.0" prefWidth="303.0" />
+              <ComboBox fx:id="category" prefHeight="0.0" prefWidth="303.0" promptText="Choose Category" />
          </children>
       </VBox>
       <Label text="Tambah Catatan Keuangan" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="TOP">

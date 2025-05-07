@@ -45,6 +45,8 @@ public class DBConnection {
         }else{
             System.out.println("Query kosong!");
         }
+        pstmt.close();
+
     }
 
     public ArrayList<Object[]> RQuery(String query, boolean showResult) throws SQLException {
@@ -61,17 +63,14 @@ public class DBConnection {
             Object[] temp = new Object[col.length];
             for (int i = 0; i < col.length; i++){
                 Object data = getColumnData(colType[i],col[i],rs);
-                if (showResult) {
-                    if ( i == 0) System.out.print("|");
-                    System.out.print(data + "|");
-                }
+                if (showResult) {if ( i == 0) System.out.print("|");System.out.print(data + "|");}
                 temp[i] = data;
             }
             result.add(temp);
-            System.out.println();
         }
 
-
+        stmt.close();
+        rs.close();
         return result;
     }
 
@@ -104,50 +103,43 @@ public class DBConnection {
             for (int i = 0; i < col.length; i++){
                 Object data = getColumnData(colType[i],col[i],rs1);
                 result[i] = data;
-//                if ( i == 0) System.out.print("|");
-//                System.out.print(data+"|");
+                if ( i == 0) System.out.print("|");
+                System.out.print(data+"|");
             }
             resultArr.add(result);
-//            System.out.println();
+            System.out.println();
         }
 
-
+        stmt.close();
+        rs1.close();
+        rs.close();
         return resultArr;
     }
 
-    private void setData(String columnType, String data,int position, PreparedStatement pstmt){
+    private void setData(String columnType, String data, int position, PreparedStatement pstmt) {
         try {
-            // TEXT -> String
             if (Objects.equals(columnType, "TEXT")) {
-                pstmt.setString(position,data);
+                pstmt.setString(position, data);
+            } else if (Objects.equals(columnType, "INTEGER")) {
+                pstmt.setInt(position, Integer.parseInt(data));
+            } else if (Objects.equals(columnType, "REAL") || Objects.equals(columnType, "FLOAT")) {
+                pstmt.setFloat(position, Float.parseFloat(data));
+            } else if (Objects.equals(columnType, "BLOB")) {
+                pstmt.setByte(position, Byte.parseByte(data));
+            } else if (Objects.equals(columnType, "BIGINT")) {
+                pstmt.setLong(position, Long.parseLong(data));
+            } else if (Objects.equals(columnType, "NUMERIC")) {
+                pstmt.setDouble(position, Double.parseDouble(data));
+            } else if (Objects.equals(columnType, "DATETIME") || Objects.equals(columnType, "DATE") || Objects.equals(columnType, "TIMESTAMP")) {
+                Timestamp timestamp = Timestamp.valueOf(data);
+                pstmt.setTimestamp(position, timestamp);
             }
-            // INTEGER -> Integer
-            else if (Objects.equals(columnType, "INTEGER")) {
-                pstmt.setInt(position,Integer.parseInt(data));
-            }
-            // REAL or FLOAT -> Float or Double
-            else if (Objects.equals(columnType, "REAL") || Objects.equals(columnType, "FLOAT")) {
-                pstmt.setFloat(position,Float.parseFloat(data)); // You can return Double if needed by using rs.getDouble(columnName)
-            }
-            // BLOB -> byte (byte[])
-            else if (Objects.equals(columnType, "BLOB")) {
-                pstmt.setByte(position,Byte.parseByte(data));
-            }
-            //BIGINT -> Long
-            else if (Objects.equals(columnType, "BIGINT")) {
-                pstmt.setLong(position,Long.parseLong(data));
-            }
-            // NUMERIC -> Double
-            else if (Objects.equals(columnType, "NUMERIC")) {
-                pstmt.setDouble(position,Double.parseDouble(data));
-            }
-
-        } catch (SQLException e){
-            e.getErrorCode();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid format for DATETIME. Expected format: yyyy-MM-dd HH:mm:ss");
         }
-
     }
-
     private static Object getColumnData(String columnType, String columnName, ResultSet rs) throws SQLException {
         try {
             // TEXT -> String
@@ -169,6 +161,8 @@ public class DBConnection {
             // BIGINT -> Long
             else if (Objects.equals(columnType, "BIGINT")) {
                 return rs.getLong(columnName);
+            } else if (Objects.equals(columnType, "DATETIME") || Objects.equals(columnType, "DATE") || Objects.equals(columnType, "TIMESTAMP")) {
+                return rs.getDate(columnName);
             }
             // NUMERIC -> Double
             else if (Objects.equals(columnType, "NUMERIC")) {
@@ -197,12 +191,18 @@ public class DBConnection {
             col[i-1] = metaData.getColumnName(i);
             colType[i-1] = metaData.getColumnTypeName(i);
         }
+        stmt.close();
+        rs.close();
         return new String[][] {col,colType};
     }
 
     public static void main(String[] args) throws SQLException {
-        DBConnection db = new DBConnection("D:/education/college/semester 4/RPLBO/Fintrack/fintrackProject/FormSet/form/fintrackDatabase.db");
+        DBConnection db = new DBConnection("/form/fintrackDatabase.db");
         db.CUDQuery("DELETE FROM userData",new String[] {}, "TEXT TEXT");
+//        Statement stmt = db.getConn().createStatement();
+//        stmt.executeQuery("DROP TABLE kategori");
+//
+//        stmt.close();
     }
 
 }

@@ -15,7 +15,7 @@ public class Apps extends Application {
         Scene scene = new Scene(fxmlLoader.load());
 
         int stageHeight = 490;
-        int stageWidht = 770;
+        int stageWidht = 988;
 
         stage.setHeight(stageHeight);
         stage.setWidth(stageWidht);

@@ -1,6 +1,8 @@
 package com.fintrack.form.uiController;
 
 import com.fintrack.form.dataBaseManager.Session;
+import com.fintrack.form.tableManager.CatatanKeuanganTable;
+import com.fintrack.form.tableManager.CategoryTable;
 import com.fintrack.form.tableManager.UserData;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -20,9 +22,29 @@ import java.util.*;
 public class FormSetController {
     Session session = Session.getInstance();
     MethodCollection method = new MethodCollection();
+
+
     @FXML private TableView<Object[]> tableView;
     @FXML private TableColumn<Object[], String> usernameColumn;
     @FXML private TableColumn<Object[], String> passwordColumn;
+
+    @FXML private TableView<Object[]> kategoriTV;
+    @FXML private TableColumn<Object[], String> kategoriTC;
+    @FXML private TableColumn<Object[], String> limitTC;
+    @FXML private TableColumn<Object[], String> userKategoriTC;
+
+
+    @FXML private TableView<Object[]> catatanTV;
+    @FXML private TableColumn<Object[], String> kategoriCatatanTC;
+    @FXML private TableColumn<Object[], String> hargaTC;
+    @FXML private TableColumn<Object[], String> tanggalTC;
+    @FXML private TableColumn<Object[], String> deskripsiTC;
+    @FXML private TableColumn<Object[], String> userTC;
+    @FXML private TableColumn<Object[], String> dateUpdateTC;
+
+
+
+
 
     @FXML private Label currentUserLabel;
 
@@ -49,7 +71,7 @@ public class FormSetController {
             removeForm();
             formNode = FXMLLoader.load(getClass().getResource(path));
             mainVBox.getChildren().add(formNode); // Add form.fxml below the button
-            addingUserDataToTable();
+            refreshTable();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent loginRoot = loader.load();
@@ -74,7 +96,7 @@ public class FormSetController {
             removeForm();
             formNode = FXMLLoader.load(getClass().getResource(path));
             mainVBox.getChildren().add(formNode); // Add form.fxml below the button
-            addingUserDataToTable();
+            refreshTable();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent loginRoot = loader.load();
@@ -96,19 +118,23 @@ public class FormSetController {
     public void deleteAccountForm(){
         String path = "/com/fintrack/form/DeleteAccountPage.fxml";
         try {
-            removeForm();
-            formNode = FXMLLoader.load(getClass().getResource(path));
-            mainVBox.getChildren().add(formNode); // Add form.fxml below the button
-            addingUserDataToTable();
+            if (session.getUsername() != null){
+                removeForm();
+                formNode = FXMLLoader.load(getClass().getResource(path));
+                mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+                refreshTable();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-            Parent loginRoot = loader.load();
-            // Get controller of login page
-            DeleteAccountPageController deleteAccountController = loader.getController();
-            // Inject this controller to login page
-            deleteAccountController.setFormSetController(this);
-            // Show login page inside mainVBox
-            mainVBox.getChildren().setAll(loginRoot);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+                Parent loginRoot = loader.load();
+                // Get controller of login page
+                DeleteAccountPageController deleteAccountController = loader.getController();
+                // Inject this controller to login page
+                deleteAccountController.setFormSetController(this);
+                // Show login page inside mainVBox
+                mainVBox.getChildren().setAll(loginRoot);
+            }else {
+                method.confirmationAlert("Anda Belum Login!");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,19 +147,54 @@ public class FormSetController {
     public void addCatatanForm(){
         String path = "/com/fintrack/form/AddCatatanPage.fxml";
         try {
-            removeForm();
-            formNode = FXMLLoader.load(getClass().getResource(path));
-            mainVBox.getChildren().add(formNode); // Add form.fxml below the button
-            addingUserDataToTable();
+            if (session.getUsername() != null){
+                removeForm();
+                formNode = FXMLLoader.load(getClass().getResource(path));
+                mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+                refreshTable();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-            Parent loginRoot = loader.load();
-            // Get controller of login page
-            AddCatatanPageController addCatatanPageController = loader.getController();
-            // Inject this controller to login page
-            addCatatanPageController.setFormSetController(this);
-            // Show login page inside mainVBox
-            mainVBox.getChildren().setAll(loginRoot);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+                Parent loginRoot = loader.load();
+                // Get controller of login page
+                AddCatatanPageController addCatatanPageController = loader.getController();
+                // Inject this controller to login page
+                addCatatanPageController.setFormSetController(this);
+                // Show login page inside mainVBox
+                mainVBox.getChildren().setAll(loginRoot);
+
+            }else{
+                method.confirmationAlert("Anda Belum Login!");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void showAddCategoryForm(){
+        String path = "/com/fintrack/form/AddCategoryPage.fxml";
+        try {
+            if (session.getUsername() != null){
+                removeForm();
+                formNode = FXMLLoader.load(getClass().getResource(path));
+                mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+                refreshTable();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+                Parent loginRoot = loader.load();
+                // Get controller of login page
+                AddKategoriController addKategoriPageController = loader.getController();
+                // Inject this controller to login page
+                addKategoriPageController.setFormSetController(this);
+                // Show login page inside mainVBox
+                mainVBox.getChildren().setAll(loginRoot);
+
+            }else{
+                method.confirmationAlert("Anda Belum Login!");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,7 +221,11 @@ public class FormSetController {
             formNode = null;
         }
     }
-
+    void refreshTable() throws SQLException {
+        addingUserDataToTable();
+        addingDataCatatanToTable();
+        addingCategoryDataToTable();
+    }
     @FXML
     public void addingUserDataToTable() throws SQLException {
         ArrayList<Object[]> rawData = UserData.getInstance().getAllData();
@@ -171,10 +236,50 @@ public class FormSetController {
             System.out.println(i[1]);
         }
 
-        ObservableList<Object[]> table = FXCollections.observableArrayList(UserData.getInstance().getUserData());
+        ObservableList<Object[]> table = FXCollections.observableArrayList(rawData);
         tableView.setItems(table);
         usernameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0].toString()));
         passwordColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1].toString()));
+    }
+
+    @FXML
+    public void addingCategoryDataToTable() throws SQLException {
+        ArrayList<Object[]> rawData = CategoryTable.getInstance().getAllDataKategori();
+
+        System.out.println(rawData);
+        for (Object[] i : rawData){
+            System.out.print(i[0]+"---");
+            System.out.println(i[1]);
+        }
+
+        ObservableList<Object[]> table = FXCollections.observableArrayList(rawData);
+        kategoriTV.setItems(table);
+        kategoriTC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0].toString()));
+        limitTC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1].toString()));
+        userKategoriTC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[2].toString()));
+    }
+
+    @FXML
+    public void addingDataCatatanToTable() throws SQLException {
+        ArrayList<Object[]> rawData = CatatanKeuanganTable.getInstance().getAllDataCatatan();
+
+        System.out.println(rawData);
+        for (Object[] i : rawData){
+            System.out.print(i[0]+" ");
+            System.out.println(i[1]);
+        }
+
+        ObservableList<Object[]> table = FXCollections.observableArrayList(rawData);
+        catatanTV.setItems(table);
+
+
+        kategoriCatatanTC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0].toString()));
+        hargaTC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1].toString()));
+        tanggalTC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[2].toString()));
+        deskripsiTC.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[3].toString()));
+        userTC.setCellValueFactory(cellData -> {Object value = cellData.getValue()[4]; return new SimpleStringProperty(value != null ? value.toString() : " ");});
+        dateUpdateTC.setCellValueFactory(cellData -> {Object dateTime = cellData.getValue()[5]; return new SimpleStringProperty(dateTime != null ? dateTime.toString() : " ");});
+
     }
 
 
