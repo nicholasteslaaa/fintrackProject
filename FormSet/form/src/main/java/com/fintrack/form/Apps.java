@@ -13,13 +13,19 @@ public class Apps extends Application {
     public void start(Stage stage) throws IOException, SQLException {
         FXMLLoader fxmlLoader = new FXMLLoader(Apps.class.getResource("FormSet.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+
+        int stageHeight = 490;
+        int stageWidht = 770;
+
+        stage.setHeight(stageHeight);
+        stage.setWidth(stageWidht);
         // Set minimum size
-        stage.setMinWidth(700);
-        stage.setMinHeight(500);
+        stage.setMinHeight(stageHeight);
+        stage.setMinWidth(stageWidht);
 
         // Set maximum size
-        stage.setMaxWidth(700);
-        stage.setMaxHeight(500);
+        stage.setMaxHeight(stageHeight);
+        stage.setMaxWidth(stageWidht);
 
         stage.setTitle("Fintrack");
         stage.setScene(scene);

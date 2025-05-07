@@ -1,5 +1,6 @@
 package com.fintrack.form.dataBaseManager;
 
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -9,7 +10,9 @@ public class DBConnection {
     private Connection conn;
 
     public DBConnection(String path) throws SQLException {
-        this.url = "jdbc:sqlite:"+path;
+        String basePath = System.getProperty("user.dir");
+        String dbPath = basePath + path;
+        this.url = "jdbc:sqlite:"+dbPath;
         this.conn = DriverManager.getConnection(this.url);
     }
 

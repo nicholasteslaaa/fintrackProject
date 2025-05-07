@@ -38,11 +38,15 @@ public class DeleteAccountPageController {
             String username = session.getUsername();
             String password = passwordField.getText().strip();
             String rePassword = passwordFieldRe_enter.getText().strip();
-            if (password.equals(rePassword)){
-                if (method.confirmationAlert("Are you sure?")){
-                    formSetController.logoutBtn();
-                    userData.deleteAccount(username,password);
-                    formSetController.addingUserDataToTable();
+            if (password.isEmpty() || rePassword.isEmpty()){
+                method.confirmationAlert("password tidak boleh kosong");
+            }else{
+                if (password.equals(rePassword)){
+                    if (method.confirmationAlert("Are you sure?")){
+                        formSetController.logoutBtn();
+                        userData.deleteAccount(username,password);
+                        formSetController.addingUserDataToTable();
+                    }
                 }
             }
         }else{

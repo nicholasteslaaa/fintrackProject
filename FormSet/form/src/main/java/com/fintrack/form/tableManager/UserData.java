@@ -12,7 +12,7 @@ public class UserData {
 
     private static UserData instance;
     private UserData() throws SQLException {
-        this.db = new DBConnection("D:/education/college/semester 4/RPLBO/Fintrack/fintrackProject/FormSet/form/fintrackDatabase.db");
+        this.db = new DBConnection("/form/fintrackDatabase.db");
         this.encrypt = new Encryption(10);
     }
 
@@ -38,7 +38,7 @@ public class UserData {
         ArrayList<Object[]> usernameDatabase = db.RQuery("SELECT username FROM userData");
 
         for (Object[] i : usernameDatabase){
-            if (i[0].toString().toLowerCase().equals(username.toLowerCase())){
+            if (i[0].toString().equals(username)){
                 return true;
             }
         }

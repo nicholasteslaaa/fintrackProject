@@ -19,6 +19,7 @@ import java.util.*;
 
 public class FormSetController {
     Session session = Session.getInstance();
+    MethodCollection method = new MethodCollection();
     @FXML private TableView<Object[]> tableView;
     @FXML private TableColumn<Object[], String> usernameColumn;
     @FXML private TableColumn<Object[], String> passwordColumn;
@@ -117,9 +118,38 @@ public class FormSetController {
     }
 
     @FXML
+    public void addCatatanForm(){
+        String path = "/com/fintrack/form/AddCatatanPage.fxml";
+        try {
+            removeForm();
+            formNode = FXMLLoader.load(getClass().getResource(path));
+            mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+            addingUserDataToTable();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+            Parent loginRoot = loader.load();
+            // Get controller of login page
+            AddCatatanPageController addCatatanPageController = loader.getController();
+            // Inject this controller to login page
+            addCatatanPageController.setFormSetController(this);
+            // Show login page inside mainVBox
+            mainVBox.getChildren().setAll(loginRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
     public void logoutBtn(){
-        session.setUsername(null);
-        setCurrentUserLabel("Current User: ");
+        if (session.getUsername() == null){
+            method.confirmationAlert("Anda Belum Login!");
+        }else{
+            session.setUsername(null);
+            setCurrentUserLabel("Current User: ");
+        }
     }
 
 
