@@ -101,14 +101,14 @@ public class DBConnection {
             for (int i = 0; i < col.length; i++){
                 Object data = getColumnData(colType[i],col[i],rs1);
                 result[i] = data;
-                if ( i == 0) System.out.print("|");
-                System.out.print(data+"|");
+//                if ( i == 0) System.out.print("|");
+//                System.out.print(data+"|");
             }
             resultArr.add(result);
-            System.out.println();
+//            System.out.println();
         }
 
-        System.out.println(result[0]);
+
         return resultArr;
     }
 

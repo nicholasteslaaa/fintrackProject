@@ -1,6 +1,8 @@
 package com.fintrack.form.uiController;
 
 import com.fintrack.form.tableManager.UserData;
+import com.fintrack.form.dataBaseManager.Session;
+
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -14,6 +16,8 @@ import java.sql.SQLException;
 
 public class LoginPageController {
     UserData userdata = UserData.getInstance();
+    Session session = Session.getInstance();
+    MethodCollection method = new MethodCollection();
 
     @FXML
     private TextField tfUsername;
@@ -45,27 +49,23 @@ public class LoginPageController {
         String username = tfUsername.getText().strip();
         String password = pfPassword.getText().strip();
         if(username.isEmpty() || password.isEmpty()){
-            confirmationAlert("username dan password tidak boleh kosong");
+            method.confirmationAlert("username dan password tidak boleh kosong");
         }
         else if(userdata.login(username,password) == 0){
-            confirmationAlert("login berhasil!");
+            method.confirmationAlert("login berhasil!");
+            session.setUsername(username);
+            formSetController.setCurrentUserLabel("Current User: "+session.getUsername());
+
         }
         else if(userdata.login(username,password) == 1){
-            confirmationAlert("password salah!");
+            method.confirmationAlert("password salah!");
         }
         else{
-            confirmationAlert("akun tidak ditemukan!");
+            method.confirmationAlert("akun tidak ditemukan!");
         }
 
     }
 
-    void confirmationAlert(String messege){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(null);
-        alert.setHeaderText(null); // or set a custom header
-        alert.setContentText(messege);
-        alert.showAndWait();
-    }
 
     @FXML
     protected void registerBtn() throws SQLException {
