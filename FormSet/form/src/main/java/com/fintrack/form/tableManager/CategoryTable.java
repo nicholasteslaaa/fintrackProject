@@ -66,7 +66,7 @@ public class CategoryTable {
             return false;
         }else{
             String kategori = session.getClickedDataKategori()[0].toString();
-            db.CUDQuery("UPDATE kategori SET category = ?, priceLimit = ? WHERE category = ?",new String[] {category,limit.toString()}, "TEXT NUMERIC");
+            db.CUDQuery("UPDATE kategori SET category = ?, priceLimit = ? WHERE category = ?",new String[] {category,limit.toString(),kategori}, "TEXT NUMERIC TEXT");
             return true;
         }
     }

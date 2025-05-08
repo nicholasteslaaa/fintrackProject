@@ -44,6 +44,8 @@ public class FormSetController {
     @FXML private TableColumn<Object[], String> dateUpdateTC;
 
     @FXML private Button editCatatanButton;
+    @FXML private Button editKategoriButton;
+
 
     @FXML private Label currentUserLabel;
 
@@ -89,6 +91,11 @@ public class FormSetController {
                 if (selected != null) {
                     clickedDataKategori = selected;
                     System.out.println("Selected: " + Arrays.toString(clickedData));
+                }
+                String path = "/com/fintrack/form/EditKategoriPage.fxml";
+                if (nodePath.equals(path)) {
+                    // Same reference
+                    editKategoriButton.fire();
                 }
 
             }
@@ -278,11 +285,12 @@ public class FormSetController {
 
     @FXML
     public void addEditKategoriForm(){
-        String path = "/com/fintrack/form/EditCatatanPage.fxml";
+        String path = "/com/fintrack/form/EditKategoriPage.fxml";
         try {
             if (session.getUsername() != null){
-                session.setClickedDataKategori(clickedData);
-                if (session.getClickedData() != null){
+                session.setClickedDataKategori(clickedDataKategori);
+
+                if (session.getClickedDataKategori() != null){
                     removeForm();
                     formNode = FXMLLoader.load(getClass().getResource(path));
                     nodePath = path;
@@ -293,9 +301,9 @@ public class FormSetController {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
                     Parent loginRoot = loader.load();
                     // Get controller of login page
-                    EditCatatanPageController editCatatanPageController = loader.getController();
+                    EditKategoriPageController editKategoriPageController = loader.getController();
                     // Inject this controller to login page
-                    editCatatanPageController.setFormSetController(this);
+                    editKategoriPageController.setFormSetController(this);
                     // Show login page inside mainVBox
                     mainVBox.getChildren().setAll(loginRoot);
                 }else{
@@ -318,6 +326,8 @@ public class FormSetController {
             method.confirmationAlert("Anda Belum Login!");
         }else{
             session.setUsername(null);
+            session.setClickedDataKategori(null);
+            session.setClickedData(null);
             setCurrentUserLabel("Current User: ");
             removeForm();
             refreshTable();
@@ -330,6 +340,7 @@ public class FormSetController {
 //            mainVBox.getChildren().remove(formNode);
             mainVBox.getChildren().clear();
             formNode = null;
+            nodePath = null;
         }
     }
     void refreshTable() throws SQLException {

@@ -118,7 +118,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button layoutX="33.0" layoutY="41.0" mnemonicParsing="false" text="Edit Category">
+                  <Button fx:id="editKategoriButton" layoutX="33.0" layoutY="41.0" mnemonicParsing="false" onAction="#addEditKategoriForm" text="Edit Category">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>

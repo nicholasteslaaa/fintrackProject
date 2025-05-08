@@ -52,17 +52,17 @@ public class EditKategoriPageController {
 
     @FXML
     private void editKategori() throws SQLException {
-//        categoryTable.editCatatan(namaKategori.getText(), Double.parseDouble(limit.getText().split(" ")[1]));
-//        formSetController.refreshTable();
-//        formSetController.removeForm();
-//        session.setClickedData(null);
+        categoryTable.editKategori(namaKategori.getText(), Double.parseDouble(limit.getText().split(" ")[1]));
+        formSetController.refreshTable();
+        formSetController.removeForm();
+        session.setClickedDataKategori(null);
     }
 
     @FXML
     private void deleteKategori() throws SQLException {
-//        catatanKeuanganTable.deleteCatatan();
-//        formSetController.refreshTable();
-//        formSetController.removeForm();
-//        session.setClickedData(null);
+        categoryTable.deleteKategori();
+        formSetController.refreshTable();
+        formSetController.removeForm();
+        session.setClickedDataKategori(null);
     }
 }
