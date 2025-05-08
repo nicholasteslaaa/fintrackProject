@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class FormSetController {
+    CategoryTable categoryTable = CategoryTable.getInstance();
     Session session = Session.getInstance();
     MethodCollection method = new MethodCollection();
 
@@ -58,6 +59,9 @@ public class FormSetController {
     Object[] clickedData;
     Object[] clickedDataKategori;
 
+    public FormSetController() throws SQLException {
+    }
+
 
     String getCurrentUserLabel(){
         return currentUserLabel.getText();
@@ -90,7 +94,7 @@ public class FormSetController {
                 Object[] selected = kategoriTV.getSelectionModel().getSelectedItem();
                 if (selected != null) {
                     clickedDataKategori = selected;
-                    System.out.println("Selected: " + Arrays.toString(clickedData));
+                    System.out.println("Selected: " + Arrays.toString(clickedDataKategori));
                 }
                 String path = "/com/fintrack/form/EditKategoriPage.fxml";
                 if (nodePath.equals(path)) {
@@ -190,20 +194,24 @@ public class FormSetController {
         String path = "/com/fintrack/form/AddCatatanPage.fxml";
         try {
             if (session.getUsername() != null){
-                removeForm();
-                formNode = FXMLLoader.load(getClass().getResource(path));
-                nodePath = path;
-                mainVBox.getChildren().add(formNode); // Add form.fxml below the button
-                refreshTable();
+                if (categoryTable.getAllDataKategori().size() > 0){
+                    removeForm();
+                    formNode = FXMLLoader.load(getClass().getResource(path));
+                    nodePath = path;
+                    mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+                    refreshTable();
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-                Parent loginRoot = loader.load();
-                // Get controller of login page
-                AddCatatanPageController addCatatanPageController = loader.getController();
-                // Inject this controller to login page
-                addCatatanPageController.setFormSetController(this);
-                // Show login page inside mainVBox
-                mainVBox.getChildren().setAll(loginRoot);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+                    Parent loginRoot = loader.load();
+                    // Get controller of login page
+                    AddCatatanPageController addCatatanPageController = loader.getController();
+                    // Inject this controller to login page
+                    addCatatanPageController.setFormSetController(this);
+                    // Show login page inside mainVBox
+                    mainVBox.getChildren().setAll(loginRoot);
+                }else{
+                    method.confirmationAlert("Tambahkan Kategori Terlebih Dahulu!, Kategori Minimal 1");
+                }
 
             }else{
                 method.confirmationAlert("Anda Belum Login!");
@@ -289,7 +297,6 @@ public class FormSetController {
         try {
             if (session.getUsername() != null){
                 session.setClickedDataKategori(clickedDataKategori);
-
                 if (session.getClickedDataKategori() != null){
                     removeForm();
                     formNode = FXMLLoader.load(getClass().getResource(path));

@@ -58,12 +58,10 @@ public class AddCatatanPageController {
             method.confirmationAlert("tanggal tidak boleh kosong");
         }
         else if (!(category.getValue() == null && priceField.getText().isEmpty() && date.getValue() == null)){
-
             String kategori = category.getValue();
             Double harga = Double.parseDouble(priceField.getText().split(" ")[1]);
             String tanggal = date.getValue().toString();
             String deskripsi = descriptionField.getText();if (deskripsi == null){deskripsi = "";}
-
             boolean result = false;
             if (catatanKeuanganTable.countingTotalSpend(kategori,tanggal)+harga > harga){
                 if (method.confirmationAlert("Anda Sudah Melebihi Batas Harian "+ kategori+" Klick ok untuk abaikan")){
@@ -72,7 +70,6 @@ public class AddCatatanPageController {
             }else{
                 result = true;
             }
-
             if (result){
                 catatanKeuanganTable.addCatatan(kategori,harga,tanggal,deskripsi, method.getNowDateTime());
                 method.confirmationAlert("Catatan Berhasil Di Tambahkan");

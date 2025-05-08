@@ -69,7 +69,7 @@ public class EditCatatanPageController {
         catatanKeuanganTable.editCatatan(category.getValue().toString(), Double.parseDouble(priceField.getText().split(" ")[1]), date.getValue().toString(),descriptionField.getText(), method.getNowDateTime());
         formSetController.refreshTable();
         formSetController.removeForm();
-        session.setClickedData(null);
+        session.unsetClickedDataKategori();
     }
 
     @FXML
@@ -77,7 +77,7 @@ public class EditCatatanPageController {
         catatanKeuanganTable.deleteCatatan();
         formSetController.refreshTable();
         formSetController.removeForm();
-        session.setClickedData(null);
+        session.unsetClickedDataKategori();
     }
 
 }

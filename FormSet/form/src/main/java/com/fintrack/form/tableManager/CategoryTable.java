@@ -54,10 +54,15 @@ public class CategoryTable {
                 return false;
             }
             else{
-                db.CUDQuery("INSERT INTO kategori VALUES (?,?,?)",new String[] {namaKategori,limit.toString(),user}, "TEXT NUMERIC TEXT");
+                addKategori(limit,namaKategori,user);
                 return true;
             }
         }
+    }
+
+    public Boolean addKategori(Double limit, String namaKategori,String username) throws SQLException {
+        db.CUDQuery("INSERT INTO kategori VALUES (?,?,?)",new String[] {namaKategori,limit.toString(),username}, "TEXT NUMERIC TEXT");
+        return true;
     }
 
     public boolean editKategori(String category,Double limit) throws SQLException {

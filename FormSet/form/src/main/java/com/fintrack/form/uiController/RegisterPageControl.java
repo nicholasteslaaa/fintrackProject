@@ -1,5 +1,6 @@
 package com.fintrack.form.uiController;
 
+import com.fintrack.form.tableManager.CategoryTable;
 import com.fintrack.form.tableManager.UserData;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 public class RegisterPageControl {
     UserData userdata = UserData.getInstance();
     MethodCollection method = new MethodCollection();
+    CategoryTable categoryTable = CategoryTable.getInstance();
 
     @FXML
     private TextField tfUsername;
@@ -51,9 +53,16 @@ public class RegisterPageControl {
                         method.confirmationAlert("username dan password tidak boleh kosong");
                     }
                     else if(userdata.register(username,password)){
-                       method.confirmationAlert("akun berhasil di daftarkan!");
+                        formSetController.removeForm();
+                        formSetController.ShowLoginForm();
+
+                        categoryTable.addKategori(50000.0,"Makanan",username);
+                        categoryTable.addKategori(50000.0,"Transportasi",username);
+                        categoryTable.addKategori(50000.0,"Pakaian",username);
+                        categoryTable.addKategori(50000.0,"Lainnya",username);
+                        method.confirmationAlert("akun berhasil di daftarkan!");
                     }else {
-                       method.confirmationAlert("register gagal");
+                        method.confirmationAlert("register gagal");
                     }
                 }
                 formSetController.addingUserDataToTable();
