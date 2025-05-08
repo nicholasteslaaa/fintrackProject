@@ -2,6 +2,8 @@ package com.fintrack.form.dataBaseManager;
 
 public class Session {
     String username;
+    Object[] clickedData;
+    Object[] clickedDataKategori;
 
     private static Session instance;
 
@@ -24,5 +26,14 @@ public class Session {
         this.username = username;
     }
     public void unsetUsername(){this.username = null;}
+    public void setClickedData(Object[] clickedData){this.clickedData = clickedData;}
+    public Object[] getClickedData(){return  this.clickedData;}
 
+    public void setClickedDataKategori(Object[] clickedDataKategori) {
+        this.clickedDataKategori = clickedDataKategori;
+    }
+
+    public Object[] getClickedDataKategori() {
+        return clickedDataKategori;
+    }
 }

@@ -35,14 +35,58 @@ public class CategoryTable {
         return temp;
     }
 
+    public boolean isExist(String kategori) throws SQLException {
+        ArrayList<Object[]> data = getAllDataKategori();
+        for (Object[] i : data){
+            if (i[0].toString().toLowerCase().strip().equals(kategori.toLowerCase().strip())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Boolean addKategori(Double limit, String namaKategori) throws SQLException {
         String user = session.getUsername();
         if (user == null){
             return false;
         }else{
-            db.CUDQuery("INSERT INTO kategori VALUES (?,?,?)",new String[] {namaKategori,limit.toString(),user}, "TEXT NUMERIC TEXT");
+            if (isExist(namaKategori)){
+                return false;
+            }
+            else{
+                db.CUDQuery("INSERT INTO kategori VALUES (?,?,?)",new String[] {namaKategori,limit.toString(),user}, "TEXT NUMERIC TEXT");
+                return true;
+            }
+        }
+    }
+
+    public boolean editKategori(String category,Double limit) throws SQLException {
+        String user = session.getUsername();
+        if (user == null){
+            return false;
+        }else{
+            String kategori = session.getClickedDataKategori()[0].toString();
+            db.CUDQuery("UPDATE kategori SET category = ?, priceLimit = ? WHERE category = ?",new String[] {category,limit.toString()}, "TEXT NUMERIC");
             return true;
         }
     }
+
+    public boolean deleteKategori() throws SQLException {
+        String user = session.getUsername();
+        if (user == null){
+            return false;
+        }else{
+            String kategori = session.getClickedDataKategori()[0].toString();
+            if (kategori != null || !kategori.isEmpty()){
+                db.CUDQuery("DELETE FROM kategori WHERE category = ?",new String[] {kategori}, "TEXT");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
+
 
 }

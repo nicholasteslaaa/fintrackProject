@@ -10,24 +10,22 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class AddKategoriController {
-    @FXML private TextField limit;
-    @FXML private TextField namaKategori;
-
-
+public class EditKategoriPageController {
     UserData userData = UserData.getInstance();
     Session session = Session.getInstance();
     MethodCollection method = new MethodCollection();
-    CatatanKeuanganTable catatanKeuanganTable = CatatanKeuanganTable.getInstance();
     CategoryTable categoryTable = CategoryTable.getInstance();
 
+    @FXML private TextField namaKategori;
+    @FXML private TextField limit;
 
     private FormSetController formSetController;
 
-    public AddKategoriController() throws SQLException {
-    }
+
+    public EditKategoriPageController() throws SQLException {}
 
     public void setFormSetController(FormSetController controller) {
         this.formSetController = controller;
@@ -40,24 +38,31 @@ public class AddKategoriController {
                 limit.setText("Rp. " + newVal.replace("Rp. ", ""));
             }});
 
+        setupValue();
     }
 
     @FXML
-    private void addKategori() throws SQLException {
-        if (!limit.getText().isEmpty() && !namaKategori.getText().isEmpty()){
-            Double DailyLimit = Double.parseDouble(limit.getText().split(" ")[1]);
-            String nama = namaKategori.getText().toString();
-            if (categoryTable.addKategori(DailyLimit,nama)){
-                method.confirmationAlert("Kategori Berhasil Di Tambahkan");
-            }else {
-                method.confirmationAlert("Kategori Sudah Ada Di Daftar Kategori!");
-            }
-            formSetController.refreshTable();
-        }else {
-            method.confirmationAlert("Limit Dan nama kategori tidak boleh kosong");
-        }
+    private void setupValue() throws SQLException {
+        String kategori = session.getClickedDataKategori()[0].toString();
+        Double harga = Double.parseDouble( session.getClickedDataKategori()[1].toString());
+
+        namaKategori.setText(kategori);
+        limit.setText(String.valueOf(harga));
     }
 
+    @FXML
+    private void editKategori() throws SQLException {
+//        categoryTable.editCatatan(namaKategori.getText(), Double.parseDouble(limit.getText().split(" ")[1]));
+//        formSetController.refreshTable();
+//        formSetController.removeForm();
+//        session.setClickedData(null);
+    }
 
-
+    @FXML
+    private void deleteKategori() throws SQLException {
+//        catatanKeuanganTable.deleteCatatan();
+//        formSetController.refreshTable();
+//        formSetController.removeForm();
+//        session.setClickedData(null);
+    }
 }

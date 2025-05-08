@@ -64,6 +64,33 @@ public class CatatanKeuanganTable {
         }
     }
 
+    public boolean editCatatan(String category,Double price,String date, String description,String dateTime) throws SQLException {
+        String user = session.getUsername();
+        if (user == null){
+            return false;
+        }else{
+            String dataTime = session.getClickedData()[5].toString();
+            db.CUDQuery("UPDATE catatanKeuangan SET kategori = ?, harga = ?, tanggal = ?, deskripsi = ?, user = ?, updateDate = ? WHERE updateDate = ?",new String[] {category,price.toString(),date,description,user,dateTime,dataTime}, "TEXT NUMERIC TEXT TEXT TEXT TEXT TEXT");
+            return true;
+        }
+    }
+
+    public boolean deleteCatatan() throws SQLException {
+        String user = session.getUsername();
+        if (user == null){
+            return false;
+        }else{
+            String dataTime = session.getClickedData()[5].toString();
+            if (dataTime != null || !dataTime.isEmpty()){
+                db.CUDQuery("DELETE FROM catatanKeuangan WHERE updateDate = ?",new String[] {dataTime}, "TEXT");
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
     public Double countingTotalSpend(String kategori, String date) throws SQLException {
         ArrayList<Object[]> data = getAllDataCatatan();
         double Counter = 0.0;

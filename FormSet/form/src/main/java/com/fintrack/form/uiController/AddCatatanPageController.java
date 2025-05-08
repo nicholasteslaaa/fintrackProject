@@ -44,7 +44,7 @@ public class AddCatatanPageController {
                 priceField.setText("Rp. " + newVal.replace("Rp. ", ""));
                 }});
 
-            }
+    }
 
     @FXML
     private void addCatatan() throws SQLException {

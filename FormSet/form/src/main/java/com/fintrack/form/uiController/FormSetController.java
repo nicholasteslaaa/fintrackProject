@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -42,9 +43,7 @@ public class FormSetController {
     @FXML private TableColumn<Object[], String> userTC;
     @FXML private TableColumn<Object[], String> dateUpdateTC;
 
-
-
-
+    @FXML private Button editCatatanButton;
 
     @FXML private Label currentUserLabel;
 
@@ -52,9 +51,11 @@ public class FormSetController {
     private VBox mainVBox;
 
     private Node formNode; // To keep track of the form.fxml content
+    private String nodePath;
 
-    private ObservableList<String> usernameList;
-    private ObservableList<String> passwordList;
+    Object[] clickedData;
+    Object[] clickedDataKategori;
+
 
     String getCurrentUserLabel(){
         return currentUserLabel.getText();
@@ -64,7 +65,6 @@ public class FormSetController {
         currentUserLabel.setText(str);
     }
 
-    Object[] clickedData;
 
     @FXML
     private void initialize(){
@@ -75,6 +75,11 @@ public class FormSetController {
                     clickedData = selected;
                     System.out.println("Selected: " + Arrays.toString(clickedData));
                 }
+                String path = "/com/fintrack/form/EditCatatanPage.fxml";
+                if (nodePath.equals(path)) {
+                    // Same reference
+                    editCatatanButton.fire();
+                }
             }
         });
 
@@ -82,13 +87,10 @@ public class FormSetController {
             if (event.getClickCount() == 1) {  // or == 2 for double click
                 Object[] selected = kategoriTV.getSelectionModel().getSelectedItem();
                 if (selected != null) {
-                    clickedData = selected;
+                    clickedDataKategori = selected;
                     System.out.println("Selected: " + Arrays.toString(clickedData));
                 }
-                else{
-                    clickedData = null;
-                    System.out.println(Arrays.toString(clickedData));
-                }
+
             }
         });
 
@@ -100,6 +102,7 @@ public class FormSetController {
         try {
             removeForm();
             formNode = FXMLLoader.load(getClass().getResource(path));
+            nodePath = path;
             mainVBox.getChildren().add(formNode); // Add form.fxml below the button
             refreshTable();
 
@@ -125,6 +128,7 @@ public class FormSetController {
         try {
             removeForm();
             formNode = FXMLLoader.load(getClass().getResource(path));
+            nodePath = path;
             mainVBox.getChildren().add(formNode); // Add form.fxml below the button
             refreshTable();
 
@@ -151,6 +155,7 @@ public class FormSetController {
             if (session.getUsername() != null){
                 removeForm();
                 formNode = FXMLLoader.load(getClass().getResource(path));
+                nodePath = path;
                 mainVBox.getChildren().add(formNode); // Add form.fxml below the button
                 refreshTable();
 
@@ -180,6 +185,7 @@ public class FormSetController {
             if (session.getUsername() != null){
                 removeForm();
                 formNode = FXMLLoader.load(getClass().getResource(path));
+                nodePath = path;
                 mainVBox.getChildren().add(formNode); // Add form.fxml below the button
                 refreshTable();
 
@@ -208,20 +214,26 @@ public class FormSetController {
         String path = "/com/fintrack/form/EditCatatanPage.fxml";
         try {
             if (session.getUsername() != null){
-                removeForm();
-                formNode = FXMLLoader.load(getClass().getResource(path));
-                mainVBox.getChildren().add(formNode); // Add form.fxml below the button
-                refreshTable();
+                session.setClickedData(clickedData);
+                if (session.getClickedData() != null){
+                    removeForm();
+                    formNode = FXMLLoader.load(getClass().getResource(path));
+                    nodePath = path;
+                    mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+                    refreshTable();
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-                Parent loginRoot = loader.load();
-                // Get controller of login page
-                EditCatatanPageController editCatatanPageController = loader.getController();
-                // Inject this controller to login page
-                editCatatanPageController.setFormSetController(this);
-                // Show login page inside mainVBox
-                mainVBox.getChildren().setAll(loginRoot);
 
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+                    Parent loginRoot = loader.load();
+                    // Get controller of login page
+                    EditCatatanPageController editCatatanPageController = loader.getController();
+                    // Inject this controller to login page
+                    editCatatanPageController.setFormSetController(this);
+                    // Show login page inside mainVBox
+                    mainVBox.getChildren().setAll(loginRoot);
+                }else{
+                    method.confirmationAlert("Click Data Pada Tabel Terlebih Dahulu");
+                }
             }else{
                 method.confirmationAlert("Anda Belum Login!");
             }
@@ -240,6 +252,7 @@ public class FormSetController {
             if (session.getUsername() != null){
                 removeForm();
                 formNode = FXMLLoader.load(getClass().getResource(path));
+                nodePath = path;
                 mainVBox.getChildren().add(formNode); // Add form.fxml below the button
                 refreshTable();
 
@@ -252,6 +265,42 @@ public class FormSetController {
                 // Show login page inside mainVBox
                 mainVBox.getChildren().setAll(loginRoot);
 
+            }else{
+                method.confirmationAlert("Anda Belum Login!");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void addEditKategoriForm(){
+        String path = "/com/fintrack/form/EditCatatanPage.fxml";
+        try {
+            if (session.getUsername() != null){
+                session.setClickedDataKategori(clickedData);
+                if (session.getClickedData() != null){
+                    removeForm();
+                    formNode = FXMLLoader.load(getClass().getResource(path));
+                    nodePath = path;
+                    mainVBox.getChildren().add(formNode); // Add form.fxml below the button
+                    refreshTable();
+
+
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+                    Parent loginRoot = loader.load();
+                    // Get controller of login page
+                    EditCatatanPageController editCatatanPageController = loader.getController();
+                    // Inject this controller to login page
+                    editCatatanPageController.setFormSetController(this);
+                    // Show login page inside mainVBox
+                    mainVBox.getChildren().setAll(loginRoot);
+                }else{
+                    method.confirmationAlert("Click Data Pada Tabel Terlebih Dahulu");
+                }
             }else{
                 method.confirmationAlert("Anda Belum Login!");
             }
@@ -287,6 +336,7 @@ public class FormSetController {
         addingUserDataToTable();
         addingDataCatatanToTable();
         addingCategoryDataToTable();
+        clickedData = null;
     }
     @FXML
     public void addingUserDataToTable() throws SQLException {
