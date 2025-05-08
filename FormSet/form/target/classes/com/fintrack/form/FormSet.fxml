@@ -104,7 +104,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="editCatatanButton" mnemonicParsing="false" onAction="#addEditCatatanForm" text="Edit Catatan">
+                  <Button fx:id="editCatatanButton" mnemonicParsing="false" onAction="#addEditCatatanForm" prefWidth="82.0" text="Edit Catatan">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -113,12 +113,12 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="257.0" prefWidth="136.0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                <children>
-                  <Button mnemonicParsing="false" onAction="#showAddCategoryForm" text="Add Category">
+                  <Button mnemonicParsing="false" onAction="#showAddCategoryForm" prefWidth="82.0" text="Add Category">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="editKategoriButton" layoutX="33.0" layoutY="41.0" mnemonicParsing="false" onAction="#addEditKategoriForm" text="Edit Category">
+                  <Button fx:id="editKategoriButton" layoutX="33.0" layoutY="41.0" mnemonicParsing="false" onAction="#addEditKategoriForm" prefWidth="82.0" text="Edit Category">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -127,11 +127,11 @@
             </VBox>
             <VBox alignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#ShowLoginForm" text="Login">
+                  <Button mnemonicParsing="false" onAction="#ShowLoginForm" prefHeight="25.0" prefWidth="112.0" text="Login">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>
-                  <Button mnemonicParsing="false" onAction="#logoutBtn" prefHeight="25.0" prefWidth="78.0" text="Logout">
+                  <Button mnemonicParsing="false" onAction="#logoutBtn" prefHeight="25.0" prefWidth="112.0" text="Logout">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin></Button>

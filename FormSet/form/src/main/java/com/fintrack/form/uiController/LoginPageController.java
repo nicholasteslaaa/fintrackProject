@@ -70,6 +70,7 @@ public class LoginPageController {
 
     @FXML
     protected void registerBtn() throws SQLException {
+        formSetController.logoutBtn();
         formSetController.ShowRegisterForm();
     }
 
